@@ -1,5 +1,6 @@
+use std::io::prelude::*;
 use std::net::{ SocketAddrV4, Ipv4Addr, TcpListener };
-use std::io::{ Read, Error };
+use std::io::{ Error };
 
 /// Simple TCP server
 pub struct Server {
@@ -36,8 +37,11 @@ impl Server {
 
     for stream in listener.incoming() {
       match stream {
-        Ok(stream) => {
-          println!("Connection established: {}", stream.peer_addr().unwrap())
+        Ok(mut stream) => {
+          println!("Connection established: {}", stream.peer_addr().unwrap());
+
+          let mut buffer = [0; 1024];
+          stream.read(&mut buffer).unwrap();
         }
         Err(e) => {
           println!("Error: {}", e);
@@ -48,6 +52,11 @@ impl Server {
 
     drop(listener);
     Ok(())
+  }
+
+  /// Gets the ip the server is being hosted on
+  pub fn get_ip(&self) -> (u8, u8, u8, u8) {
+    return self.ip;
   }
 
   /// Gets the port the server is being hosted on
