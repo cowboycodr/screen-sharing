@@ -4,6 +4,8 @@ use std::net::{
   Ipv4Addr
 };
 
+use std::net::tcp
+
 pub struct Client {
   address: SocketAddrV4
 }
@@ -23,19 +25,8 @@ impl Client {
   }
 
   pub fn connect(&self) {
-    match TcpStream::connect(self.address) {
-      Ok(mut stream) => {
-        println!("Client connected to server");
+    let mut stream = TcpStream::connect(self.address).unwrap();
 
-        let msg = b"Hello, World!";
-
-        stream.write(buf);
-
-        
-      },
-      Err(e) => {
-        println!("Client failed to connect: {}", e);
-      }
-    }
+    let _ = stream.write(&[1]);
   } 
 }
