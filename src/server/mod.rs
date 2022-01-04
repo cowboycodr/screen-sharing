@@ -31,9 +31,9 @@ impl Server {
 
     let socket = SocketAddrV4::new(loopback, self.port);
     let listener = TcpListener::bind(socket)?;
-    let port = listener.local_addr()?;
+    let address = listener.local_addr()?;
 
-    println!("Server started on http://{}", port);
+    println!("Server started on http://{}", address);
 
     for stream in listener.incoming() {
       match stream {
